@@ -1,0 +1,14 @@
+name: "Data Wrangling"
+output_dir: "docs" # necessary for hosting on GitHub; just add it for now
+navbar:  
+  title: "Data Wrangling"
+  left:  # you can also use 'right'
+    - text: "Home"
+      icon: fa-home  # handy way to use FontAwesome icons in nav!
+      href: index.html  # don't link to the .Rmd file
+    - text: "About"
+      icon: fa-newspaper-o
+      href: CombiningTables.html
+output:
+  html_document:
+  theme: cosmo

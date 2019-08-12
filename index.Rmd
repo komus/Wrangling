@@ -1,9 +1,8 @@
 ---
-title: "CombiningTables"
+title: "index"
 author: "Komolafe Oyindolapo"
 date: "2019 M08 12"
 output: html_document
-
 ---
 
 ```{r setup, include=FALSE}
