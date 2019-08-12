@@ -6,9 +6,9 @@ navbar:
     - text: "Home"
       icon: fa-home  # handy way to use FontAwesome icons in nav!
       href: index.html  # don't link to the .Rmd file
-    - text: "About"
+    - text: "Combining Tables"
       icon: fa-newspaper-o
       href: CombiningTables.html
 output:
   html_document:
-  theme: cosmo
+theme: cosmo
