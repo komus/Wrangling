@@ -12,20 +12,52 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This is the solution to Comprehensive check.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+<strong>Question 1:</strong> You have created data frames tab1 and tab2 of state population and election data, similar to our module videos:
+<pre><code>> tab1
+state   	     population
+Alabama             4779736
+Alaska     	         710231
+Arizona    	        6392017
+Delaware     	     897934
+District of Columbia 601723
 
-```{r cars}
-summary(cars)
+> tab2
+state  electoral_votes
+Alabama      9
+Alaska       3
+Arizona     11
+California  55
+Colorado     9
+Connecticut  7
+
+> dim(tab1)
+[1] 5 2
+
+> dim(tab2)
+[1] 6 2 </code></pre>
+What are the dimensions of the table dat, created by the following command?
+
+<pre><code>dat <- left_join(tab1, tab2, by = “state”)</pre></code>
+
+<strong>Answer:</strong><code> 5 rows by 3 columns correct </code>
+
+<strong>Question 2:</strong> We are still using the <code> tab1 </code> and <code> tab2 </code> tables shown in question 1. What join command would create a new table “dat” with three rows and two columns?
+
+<p><strong>Answer:</strong> <code>dat <- semi_join(tab1, tab2, by = “state”) </code></p>
+
+
+<strong>Question3</strong> Which of the following are real differences between the join and bind functions?
+<strong>Answer:</strong><pre><code>
+- Binding functions combine by position, while join functions match by variables.
+- Joining functions can join datasets of different dimensions, but the bind functions must match on the appropriate dimension (either same row or column numbers).
+- Bind functions can combine both vectors and dataframes, while join functions work for only for dataframes.
+</code></pre>
+
+
+
+```{r message=FALSE, warning=FALSE}
+
+
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
