@@ -314,9 +314,6 @@ $(document).ready(function () {
 </div>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is the solution to Comprehensive check.</p>
 <strong>Question 1:</strong> You have created data frames tab1 and tab2 of state population and election data, similar to our module videos:
 <pre><code>> tab1
 state            population
@@ -348,13 +345,92 @@ Connecticut  7
 <p>
 <strong>Answer:</strong> <code>dat &lt;- semi_join(tab1, tab2, by = “state”) </code>
 </p>
-<strong>Question3</strong> Which of the following are real differences between the join and bind functions? <strong>Answer:</strong>
+<strong>Question 3</strong> Which of the following are real differences between the join and bind functions? <strong>Answer:</strong>
 <pre><code>
 - Binding functions combine by position, while join functions match by variables.
 - Joining functions can join datasets of different dimensions, but the bind functions must match on the appropriate dimension (either same row or column numbers).
 - Bind functions can combine both vectors and dataframes, while join functions work for only for dataframes.
 </code></pre>
-</div>
+<strong>Question 4</strong> We have two simple tables, shown below:
+<pre><code>
+> df1
+ x     y    
+ a     a    
+ b     a    
+
+> df2
+ x     y    
+ a     a    
+ a     b  </code></pre>
+Which command would result in the following table?
+<pre><code>
+> final
+ x     y    
+ b     a   
+</code></pre>
+<p><strong>Answer:</strong> <code>final &lt;- setdiff(df1, df2)</code></p>
+<p><strong>Question 5</strong> Use the correct join or bind function to create a combined table of the names and statistics of the top 10 home run (HR) hitters for 2016. This table should have the player ID, first name, last name, and number of HR for the top 10 players. Name this data frame top_names.</p>
+Identify the join or bind that fills the blank in this code to create the correct table:
+<pre><code>
+top_names <- top %>% ___________________ %>%
+    select(playerID, nameFirst, nameLast, HR)
+</code></pre>
+<p><strong>Answer:</strong> <code>left_join(Master) </code></p>
+<p><strong>Question 6</strong> Inspect the Salaries data frame. Filter this data frame to the 2016 salaries, then use the correct bind join function to add a salary column to the top_names data frame from the previous question. Name the new data frame top_salary. Use this code framework:</p>
+<pre><code>
+top_salary <- Salaries %>% filter(yearID == 2016) %>%
+  ______________ %>%
+  select(nameFirst, nameLast, teamID, HR, salary)
+  </code></pre>
+<p><strong>Answer:</strong> <code>right_join(top_names) </code></p>
+<p><strong>Question 7</strong> Inspect the AwardsPlayers table. Filter awards to include only the year 2016.</p>
+<p>How many players out of the top 10 home run hitters won at least one award in 2016?</p>
+<pre class="r"><code>library(Lahman)
+library(tidyverse)
+
+top &lt;- Batting %&gt;% 
+  filter(yearID == 2016) %&gt;%
+  arrange(desc(HR)) %&gt;%    # arrange by descending HR count
+  slice(1:10)  %&gt;% inner_join(AwardsPlayers) %&gt;% group_by(playerID) %&gt;% tally() %&gt;% select(playerID)
+
+top %&gt;% as_tibble()</code></pre>
+<pre><code>## # A tibble: 3 x 1
+##   playerID 
+##   &lt;chr&gt;    
+## 1 arenano01
+## 2 bryankr01
+## 3 trumbma01</code></pre>
+<pre class="r"><code>awards &lt;- AwardsPlayers %&gt;% filter(yearID == 2016) %&gt;% group_by(playerID) %&gt;% tally() %&gt;% select(playerID)
+awards %&gt;% as_tibble()</code></pre>
+<pre><code>## # A tibble: 47 x 1
+##    playerID 
+##    &lt;chr&gt;    
+##  1 altuvjo01
+##  2 arenano01
+##  3 arrieja01
+##  4 baezja01 
+##  5 beltrad01
+##  6 bettsmo01
+##  7 blackch02
+##  8 bogaexa01
+##  9 bradlja02
+## 10 brittza01
+## # ... with 37 more rows</code></pre>
+<pre class="r"><code>setdiff(awards, top)</code></pre>
+<pre><code>## # A tibble: 44 x 1
+##    playerID 
+##    &lt;chr&gt;    
+##  1 altuvjo01
+##  2 arrieja01
+##  3 baezja01 
+##  4 beltrad01
+##  5 bettsmo01
+##  6 blackch02
+##  7 bogaexa01
+##  8 bradlja02
+##  9 brittza01
+## 10 cabremi01
+## # ... with 34 more rows</code></pre>
 
 
 

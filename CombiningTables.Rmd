@@ -10,8 +10,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-This is the solution to Comprehensive check.
 
 <strong>Question 1:</strong> You have created data frames tab1 and tab2 of state population and election data, similar to our module videos:
 <pre><code>> tab1
@@ -47,16 +45,71 @@ What are the dimensions of the table dat, created by the following command?
 <p><strong>Answer:</strong> <code>dat <- semi_join(tab1, tab2, by = “state”) </code></p>
 
 
-<strong>Question3</strong> Which of the following are real differences between the join and bind functions?
+<strong>Question 3</strong> Which of the following are real differences between the join and bind functions?
 <strong>Answer:</strong><pre><code>
 - Binding functions combine by position, while join functions match by variables.
 - Joining functions can join datasets of different dimensions, but the bind functions must match on the appropriate dimension (either same row or column numbers).
 - Bind functions can combine both vectors and dataframes, while join functions work for only for dataframes.
 </code></pre>
 
+<strong>Question 4</strong> We have two simple tables, shown below:
+<pre><code>
+> df1
+ x     y    
+ a     a    
+ b     a    
 
+> df2
+ x     y    
+ a     a    
+ a     b  </code></pre>
 
+Which command would result in the following table?
+<pre><code>
+> final
+ x     y    
+ b     a   
+</code></pre>
+
+<strong>Answer:</strong> <code>final <- setdiff(df1, df2)</code>
+
+<strong>Question 5</strong> Use the correct join or bind function to create a combined table of the names and statistics of the top 10 home run (HR) hitters for 2016. This table should have the player ID, first name, last name, and number of HR for the top 10 players. Name this data frame top_names.
+
+Identify the join or bind that fills the blank in this code to create the correct table:
+<pre><code>
+top_names <- top %>% ___________________ %>%
+    select(playerID, nameFirst, nameLast, HR)
+</code></pre>
+<strong>Answer:</strong> <code>left_join(Master) </code>
+
+<strong>Question 6</strong> Inspect the Salaries data frame. Filter this data frame to the 2016 salaries, then use the correct bind join function to add a salary column to the top_names data frame from the previous question. Name the new data frame top_salary. Use this code framework:
+
+<pre><code>
+top_salary <- Salaries %>% filter(yearID == 2016) %>%
+  ______________ %>%
+  select(nameFirst, nameLast, teamID, HR, salary)
+  </code></pre>
+  <strong>Answer:</strong> <code>right_join(top_names) </code>
+  
+  <strong>Question 7</strong> Inspect the AwardsPlayers table. Filter awards to include only the year 2016.
+
+How many players out of the top 10 home run hitters won at least one award in 2016?
 ```{r message=FALSE, warning=FALSE}
+library(Lahman)
+library(tidyverse)
 
+top <- Batting %>% 
+  filter(yearID == 2016) %>%
+  arrange(desc(HR)) %>%    # arrange by descending HR count
+  slice(1:10)  %>% inner_join(AwardsPlayers) %>% group_by(playerID) %>% tally() %>% select(playerID)
+
+top %>% as_tibble()
+
+
+
+awards <- AwardsPlayers %>% filter(yearID == 2016) %>% group_by(playerID) %>% tally() %>% select(playerID)
+awards %>% as_tibble()
+
+setdiff(awards, top)
 
 ```

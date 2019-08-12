@@ -1,5 +1,4 @@
 ---
-title: "index"
 author: "Komolafe Oyindolapo"
 date: "2019 M08 12"
 output: html_document
@@ -9,4 +8,4 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Welcome to Data Wrangling
