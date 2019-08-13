@@ -9,6 +9,9 @@ navbar:
     - text: "Combining Tables"
       icon: fa-newspaper-o
       href: CombiningTables.html
+    - text: "Web Scraping"
+      icon: fa-web
+      href: webscraping.html
 output:
   html_document:
 theme: cosmo
