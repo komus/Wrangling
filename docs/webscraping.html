@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Komolafe Oyindolapo" />
+
+
+<title>WebScraping</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Data Wrangling</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="CombiningTables.html">
+    <span class="fa fa-newspaper-o"></span>
+     
+    Combining Tables
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">WebScraping</h1>
+<h4 class="author"><em>Komolafe Oyindolapo</em></h4>
+<h4 class="date"><em>2019 M08 13</em></h4>
+
+</div>
+
+
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<p>Create a table called <code>tab_1</code> using entry 10 of nodes. Create a table called <code>tab_2</code> using entry 19 of nodes.</p>
+<p>Note that the column names should be <code>c(“Team”, “Payroll”, “Average”)</code>. You can see that these column names are actually in the first data row of each table, and that tab_1 has an extra first column No. that should be removed so that the column names for both tables match.</p>
+<p>Remove the extra column in tab_1, remove the first row of each dataset, and change the column names for each table to <code> c(“Team”, “Payroll”, “Average”) </code>. Use a full_join by the Team to combine these two tables.</p>
+<p>How many rows are in the joined data table?</p>
+<pre class="r"><code>library(rvest)
+library(tidyverse)
+url &lt;- &quot;https://web.archive.org/web/20181024132313/http://www.stevetheump.com/Payrolls.htm&quot;
+h &lt;- read_html(url)
+nodes &lt;- html_nodes(h, &quot;table&quot;)
+tab_1 &lt;- html_table(nodes[[10]])
+tab_2 &lt;- html_table(nodes[[19]])
+tab_1 &lt;- tab_1[-1]
+tab_1 &lt;- tab_1 %&gt;% slice(2:n())%&gt;% setNames(c(X2 =&quot;Team&quot;, X3 = &quot;Payroll&quot;, X4 = &quot;Average&quot;))
+
+tab_2 &lt;- tab_2 %&gt;% slice(2:n())%&gt;% setNames(c(X2 =&quot;Team&quot;, X3 = &quot;Payroll&quot;, X4 = &quot;Average&quot;))
+
+dat_full &lt;- full_join(tab_1, tab_2, by = &quot;Team&quot;)
+dat_full</code></pre>
+<pre><code>##                     Team    Payroll.x  Average.x    Payroll.y  Average.y
+## 1       New York Yankees $206,333,389 $8,253,336         &lt;NA&gt;       &lt;NA&gt;
+## 2         Boston Red Sox $162,747,333 $5,611,977         &lt;NA&gt;       &lt;NA&gt;
+## 3           Chicago Cubs $146,859,000 $5,439,222  $64,015,833 $2,462,147
+## 4  Philadelphia Phillies $141,927,381 $5,068,835         &lt;NA&gt;       &lt;NA&gt;
+## 5          New York Mets $132,701,445 $5,103,902         &lt;NA&gt;       &lt;NA&gt;
+## 6         Detroit Tigers $122,864,929 $4,550,553         &lt;NA&gt;       &lt;NA&gt;
+## 7      Chicago White Sox $108,273,197 $4,164,354  $62,363,000 $2,309,741
+## 8     Los Angeles Angels $105,013,667 $3,621,161         &lt;NA&gt;       &lt;NA&gt;
+## 9       Seattle Mariners  $98,376,667 $3,513,452         &lt;NA&gt;       &lt;NA&gt;
+## 10  San Francisco Giants  $97,828,833 $3,493,887         &lt;NA&gt;       &lt;NA&gt;
+## 11       Minnesota Twins  $97,559,167 $3,484,256         &lt;NA&gt;       &lt;NA&gt;
+## 12   Los Angeles Dodgers  $94,945,517 $3,651,751         &lt;NA&gt;       &lt;NA&gt;
+## 13   St. Louis Cardinals  $93,540,753 $3,741,630         &lt;NA&gt;       &lt;NA&gt;
+## 14        Houston Astros  $92,355,500 $3,298,411         &lt;NA&gt;       &lt;NA&gt;
+## 15        Atlanta Braves  $84,423,667 $3,126,802         &lt;NA&gt;       &lt;NA&gt;
+## 16      Colorado Rockies  $84,227,000 $2,904,379         &lt;NA&gt;       &lt;NA&gt;
+## 17     Baltimore Orioles  $81,612,500 $3,138,942         &lt;NA&gt;       &lt;NA&gt;
+## 18     Milwaukee Brewers  $81,108,279 $2,796,837         &lt;NA&gt;       &lt;NA&gt;
+## 19       Cincinnati Reds  $72,386,544 $2,784,098         &lt;NA&gt;       &lt;NA&gt;
+## 20    Kansas City Royals  $72,267,710 $2,491,990         &lt;NA&gt;       &lt;NA&gt;
+## 21        Tampa Bay Rays  $71,923,471 $2,663,832         &lt;NA&gt;       &lt;NA&gt;
+## 22     Toronto Blue Jays  $62,689,357 $2,089,645         &lt;NA&gt;       &lt;NA&gt;
+## 23  Washington Nationals  $61,425,000 $2,047,500         &lt;NA&gt;       &lt;NA&gt;
+## 24     Cleveland Indians  $61,203,967 $2,110,482         &lt;NA&gt;       &lt;NA&gt;
+## 25  Arizona Diamondbacks  $60,718,167 $2,335,314         &lt;NA&gt;       &lt;NA&gt;
+## 26       Florida Marlins  $55,641,500 $2,060,796         &lt;NA&gt;       &lt;NA&gt;
+## 27         Texas Rangers  $55,250,545 $1,905,191         &lt;NA&gt;       &lt;NA&gt;
+## 28     Oakland Athletics  $51,654,900 $1,666,287         &lt;NA&gt;       &lt;NA&gt;
+## 29      San Diego Padres  $37,799,300 $1,453,819         &lt;NA&gt;       &lt;NA&gt;
+## 30    Pittsburgh Pirates  $34,943,000 $1,294,185         &lt;NA&gt;       &lt;NA&gt;
+## 31            NY Yankees         &lt;NA&gt;       &lt;NA&gt; $109,791,893 $3,541,674
+## 32                Boston         &lt;NA&gt;       &lt;NA&gt; $109,558,908 $3,423,716
+## 33           Los Angeles         &lt;NA&gt;       &lt;NA&gt; $108,980,952 $3,757,964
+## 34               NY Mets         &lt;NA&gt;       &lt;NA&gt;  $93,174,428 $3,327,658
+## 35             Cleveland         &lt;NA&gt;       &lt;NA&gt;  $91,974,979 $3,065,833
+## 36               Atlanta         &lt;NA&gt;       &lt;NA&gt;  $91,851,687 $2,962,958
+## 37                 Texas         &lt;NA&gt;       &lt;NA&gt;  $88,504,421 $2,854,981
+## 38               Arizona         &lt;NA&gt;       &lt;NA&gt;  $81,206,513 $2,900,233
+## 39             St. Louis         &lt;NA&gt;       &lt;NA&gt;  $77,270,855 $2,664,512
+## 40               Toronto         &lt;NA&gt;       &lt;NA&gt;  $75,798,500 $2,707,089
+## 41               Seattle         &lt;NA&gt;       &lt;NA&gt;  $75,652,500 $2,701,875
+## 42             Baltimore         &lt;NA&gt;       &lt;NA&gt;  $72,426,328 $2,497,460
+## 43              Colorado         &lt;NA&gt;       &lt;NA&gt;  $71,068,000 $2,632,148
+## 44         San Francisco         &lt;NA&gt;       &lt;NA&gt;  $63,332,667 $2,345,654
+## 45               Houston         &lt;NA&gt;       &lt;NA&gt;  $60,382,667 $2,236,395
+## 46             Tampa Bay         &lt;NA&gt;       &lt;NA&gt;  $54,951,602 $2,035,245
+## 47            Pittsburgh         &lt;NA&gt;       &lt;NA&gt;  $52,698,333 $1,699,946
+## 48               Detroit         &lt;NA&gt;       &lt;NA&gt;  $49,831,167 $1,779,685
+## 49               Anaheim         &lt;NA&gt;       &lt;NA&gt;  $46,568,180 $1,502,199
+## 50            Cincinnati         &lt;NA&gt;       &lt;NA&gt;  $45,227,882 $1,739,534
+## 51             Milwaukee         &lt;NA&gt;       &lt;NA&gt;  $43,089,333 $1,595,901
+## 52          Philadelphia         &lt;NA&gt;       &lt;NA&gt;  $41,664,167 $1,602,468
+## 53             San Diego         &lt;NA&gt;       &lt;NA&gt;  $38,333,117 $1,419,745
+## 54           Kansas City         &lt;NA&gt;       &lt;NA&gt;  $35,643,000 $1,229,069
+## 55               Florida         &lt;NA&gt;       &lt;NA&gt;  $35,504,167 $1,183,472
+## 56              Montreal         &lt;NA&gt;       &lt;NA&gt;  $34,774,500 $1,159,150
+## 57               Oakland         &lt;NA&gt;       &lt;NA&gt;  $33,810,750 $1,252,250
+## 58             Minnesota         &lt;NA&gt;       &lt;NA&gt;  $24,350,000   $901,852</code></pre>
+</div>
+<div id="question-5" class="section level2">
+<h2>Question 5</h2>
+<pre><code>
+library(rvest)
+library(tidyverse)
+url <- "https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_United_Kingdom_European_Union_membership_referendum&oldid=896735054"
+</code></pre>
+<p>Assign tab to be the html nodes of the “table” class.</p>
+<p>How many tables are in this Wikipedia page?</p>
+<pre class="r"><code>url_1 &lt;- &quot;https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_United_Kingdom_European_Union_membership_referendum&amp;oldid=896735054&quot;
+h_1 &lt;- read_html(url_1)
+tab &lt;- html_nodes(h_1, &quot;table&quot;)
+read &lt;- html_table(tab[[7]], fill = TRUE)</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

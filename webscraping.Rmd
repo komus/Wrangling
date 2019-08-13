@@ -1,0 +1,55 @@
+---
+title: "WebScraping"
+author: "Komolafe Oyindolapo"
+date: "2019 M08 13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 4
+
+Create a table called <code>tab_1</code> using entry 10 of nodes. Create a table called <code>tab_2</code> using entry 19 of nodes.
+
+Note that the column names should be <code>c("Team", "Payroll", "Average")</code>. You can see that these column names are actually in the first data row of each table, and that tab_1 has an extra first column No. that should be removed so that the column names for both tables match.
+
+Remove the extra column in tab_1, remove the first row of each dataset, and change the column names for each table to <code> c("Team", "Payroll", "Average") </code>. Use a full_join by the Team to combine these two tables.
+
+How many rows are in the joined data table?
+
+```{r warning=FALSE, message=FALSE}
+library(rvest)
+library(tidyverse)
+url <- "https://web.archive.org/web/20181024132313/http://www.stevetheump.com/Payrolls.htm"
+h <- read_html(url)
+nodes <- html_nodes(h, "table")
+tab_1 <- html_table(nodes[[10]])
+tab_2 <- html_table(nodes[[19]])
+tab_1 <- tab_1[-1]
+tab_1 <- tab_1 %>% slice(2:n())%>% setNames(c(X2 ="Team", X3 = "Payroll", X4 = "Average"))
+
+tab_2 <- tab_2 %>% slice(2:n())%>% setNames(c(X2 ="Team", X3 = "Payroll", X4 = "Average"))
+
+dat_full <- full_join(tab_1, tab_2, by = "Team")
+dat_full
+```
+
+## Question 5
+<pre><code>
+library(rvest)
+library(tidyverse)
+url <- "https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_United_Kingdom_European_Union_membership_referendum&oldid=896735054"
+</code></pre>
+Assign tab to be the html nodes of the "table" class.
+
+How many tables are in this Wikipedia page?
+```{r}
+url_1 <- "https://en.wikipedia.org/w/index.php?title=Opinion_polling_for_the_United_Kingdom_European_Union_membership_referendum&oldid=896735054"
+h_1 <- read_html(url_1)
+tab <- html_nodes(h_1, "table")
+read <- html_table(tab[[7]], fill = TRUE)
+```
+
+
