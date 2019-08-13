@@ -10,7 +10,7 @@ navbar:
       icon: fa-newspaper-o
       href: CombiningTables.html
     - text: "Web Scraping"
-      icon: fa-web
+      icon: fa-globe
       href: webscraping.html
 output:
   html_document:
