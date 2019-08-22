@@ -59,4 +59,4 @@ app_more <- group_word %>% filter(num > 100)
 nrow(app_more)
 
 
-afinn <- get_sentiments("afinn")
+
